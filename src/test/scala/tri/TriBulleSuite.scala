@@ -98,4 +98,5 @@ class TriBulleSuite extends FunSuite {
   test("Tri - with order function - chars list") {
     assert(triCroissantChar(List('a', 'z', 'E', '1', 'r')) === List('1', 'E', 'a', 'r', 'z'))
   }
+
 }

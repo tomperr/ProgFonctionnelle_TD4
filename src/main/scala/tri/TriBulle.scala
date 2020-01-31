@@ -42,23 +42,13 @@ object TriBulle {
    */
 
   def bubbleTri(myList: List[Int]): List[Int] = {
-    def once(myList: List[Int]) : List[Int] = {
-      myList match {
-        case Nil => Nil
-        case elem::Nil => elem::Nil
-        case first::second::reste if first > second => second::once(first::reste)
-        case first::second::reste if first <= second => first::once(second::reste)
-      }
+
+    val result = bubble(myList)
+    result match {
+      case Nil => Nil
+      case _ if result == myList => myList
+      case _ => bubbleTri(result.init):::List(result.last)
     }
-    
-    def _bubble(myList: List[Int]) : List[Int] = {
-      myList match {
-        case Nil => Nil
-        case _ => _bubble(once(myList).init):+once(myList).last
-      }
-    }
-    
-    _bubble(myList)
   }
 
   /**
@@ -155,4 +145,5 @@ object TriBulle {
    * Tri d'une liste de carateres
    */
   def triCroissantChar(myList: List[Char]): List[Char] = triBullePoly(myList, (x: Char, y: Char) => x.toInt < y.toInt)
+  
 }
