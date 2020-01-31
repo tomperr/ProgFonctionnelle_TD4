@@ -24,7 +24,16 @@ object TriBulle {
    */
 
   
-  def bubble(myList: List[Int]): List[Int] = ???
+  def bubble(myList: List[Int]): List[Int] = {
+    
+    myList match {
+      case Nil => Nil
+      case elem::Nil => elem::Nil
+      case first::second::reste if first > second => second::bubble(first::reste)
+      case first::second::reste if first <= second => first::bubble(second::reste)
+    }
+    
+  }
 
   /**
    * Tri une liste
@@ -32,7 +41,25 @@ object TriBulle {
    * de la final)
    */
 
-  def bubbleTri(myList: List[Int]): List[Int] = ???
+  def bubbleTri(myList: List[Int]): List[Int] = {
+    def once(myList: List[Int]) : List[Int] = {
+      myList match {
+        case Nil => Nil
+        case elem::Nil => elem::Nil
+        case first::second::reste if first > second => second::once(first::reste)
+        case first::second::reste if first <= second => first::once(second::reste)
+      }
+    }
+    
+    def _bubble(myList: List[Int]) : List[Int] = {
+      myList match {
+        case Nil => Nil
+        case _ => _bubble(once(myList).init):+once(myList).last
+      }
+    }
+    
+    _bubble(myList)
+  }
 
   /**
    * Notre fonction trie une liste en ordre croissant. Tres bien.
@@ -40,17 +67,35 @@ object TriBulle {
    * Refefinissez la fonction bulle avec en parametre de plus une fonction
    */
 
-  def bubble(myList: List[Int], plusGrandQue: (Int, Int) => Boolean): List[Int] = ???
+  def bubble(myList: List[Int], plusGrandQue: (Int, Int) => Boolean): List[Int] = {
+    def once(myList: List[Int], plusGrandQue: (Int, Int) => Boolean) : List[Int] = {
+      myList match {
+        case Nil => Nil
+        case elem::Nil => elem::Nil
+        case first::second::reste if !plusGrandQue(first, second) => second::once(first::reste, plusGrandQue)
+        case first::second::reste if plusGrandQue(first, second) => first::once(second::reste, plusGrandQue)
+      }
+    }
+    
+    def _bubble(myList: List[Int], plusGrandQue: (Int, Int) => Boolean) : List[Int] = {
+      myList match {
+        case Nil => Nil
+        case _ => _bubble(once(myList, plusGrandQue).init, plusGrandQue):+once(myList, plusGrandQue).last
+      }
+    }
+    
+    _bubble(myList, plusGrandQue)
+  }
 
   /**
    * tri croissant avec la nouvelle fonction bubble
    */
-  def triDecroissant(myList: List[Int]): List[Int] = ???
+  def triDecroissant(myList: List[Int]): List[Int] = bubble(myList, (x, y) => x >= y)
 
   /**
    * tri decroissant avec la nouvelle fonction bubble
    */
-  def triCroissant(myList: List[Int]): List[Int] = ???
+  def triCroissant(myList: List[Int]): List[Int] = bubble(myList, (x, y) => x <= y)
 
 
   /* Le Polymorphisme est atteint en precisant les variables de type. 
@@ -66,12 +111,48 @@ object TriBulle {
   /**
    *  Reecrivez les fonctions precedents avec des type generique
    */
-  def bullePoly[A](myList: List[A], plusGrandQue: (A, A) => Boolean): List[A] = ???
+  def bullePoly[A](myList: List[A], plusGrandQue: (A, A) => Boolean): List[A] = {
+    def once(myList: List[A], plusGrandQue: (A, A) => Boolean) : List[A] = {
+      myList match {
+        case Nil => Nil
+        case elem::Nil => elem::Nil
+        case first::second::reste if !plusGrandQue(first, second) => second::once(first::reste, plusGrandQue)
+        case first::second::reste if plusGrandQue(first, second) => first::once(second::reste, plusGrandQue)
+      }
+    }
+    
+    def _bubble(myList: List[A], plusGrandQue: (A, A) => Boolean) : List[A] = {
+      myList match {
+        case Nil => Nil
+        case _ => _bubble(once(myList, plusGrandQue).init, plusGrandQue):+once(myList, plusGrandQue).last
+      }
+    }
+    
+    _bubble(myList, plusGrandQue)
+  }
 
-  def triBullePoly[A](myList: List[A], plusGrandQue: (A, A) => Boolean): List[A] = ???
+  def triBullePoly[A](myList: List[A], plusGrandQue: (A, A) => Boolean): List[A] = {
+    def once(myList: List[A], plusGrandQue: (A, A) => Boolean) : List[A] = {
+      myList match {
+        case Nil => Nil
+        case elem::Nil => elem::Nil
+        case first::second::reste if !plusGrandQue(first, second) => second::once(first::reste, plusGrandQue)
+        case first::second::reste if plusGrandQue(first, second) => first::once(second::reste, plusGrandQue)
+      }
+    }
+    
+    def _bubble(myList: List[A], plusGrandQue: (A, A) => Boolean) : List[A] = {
+      myList match {
+        case Nil => Nil
+        case _ => _bubble(once(myList, plusGrandQue).init, plusGrandQue):+once(myList, plusGrandQue).last
+      }
+    }
+    
+    _bubble(myList, plusGrandQue)
+  }
 
   /**
    * Tri d'une liste de carateres
    */
-  def triCroissantChar(myList: List[Char]): List[Char] = ???
+  def triCroissantChar(myList: List[Char]): List[Char] = triBullePoly(myList, (x: Char, y: Char) => x.toInt < y.toInt)
 }
